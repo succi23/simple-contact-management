@@ -18,6 +18,7 @@
   },
   "homepage": "https://gitlab.com/succi23/pixelhouse#README",
   "dependencies": {
+    "basic-auth": "^1.0.4",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "mongoose": "^4.6.0"
