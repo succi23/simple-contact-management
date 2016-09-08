@@ -30,7 +30,9 @@ router.get('/', (req, res) => {
 
 router.route('/contacts')
   .get((req, res) => {
-    Contact.find((err, data) => {
+    Contact.find({}).sort({created_at: 'desc'})
+    .select('name nick_name title email phone address company')
+    .exec((err, data) => {
       if (err)
         res
         .json({
@@ -42,17 +44,7 @@ router.route('/contacts')
       .json({
         success: true,
         message: 'Get Data Succesfully',
-        data: data
-        // {
-        //   name: data.name,
-        //   nick_name: data.nick_name,
-        //   title: data.title,
-        //   email: data.email,
-        //   phone: data.phone,
-        //   address: data.address,
-        //   company: data.company
-        // }
-        ,
+        data: data,
         length: data.length
       });
     });
@@ -105,9 +97,9 @@ router.route('/contacts')
 
 router.route('/contacts/:name')
   .get((req, res) => {
-    Contact.findOne({
-      nick_name: req.params.name
-    }, (err, data) => {
+    Contact.findOne({ nick_name: req.params.name })
+    .select('name nick_name title email phone address company')
+    .exec((err, data) => {
       if (err)
         res
         .json({

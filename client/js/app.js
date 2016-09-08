@@ -49,11 +49,13 @@ class Home extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      static_data: []
     };
     this.getData    = this.getData.bind(this);
     this.appendData = this.appendData.bind(this);
     this.sliceData  = this.sliceData.bind(this);
+    this.filterData = this.filterData.bind(this);
   }
   componentWillMount() {
     this.getData();
@@ -69,23 +71,66 @@ class Home extends React.Component {
       return res.json();
     })
     .then((data) => {
-      this.setState({data: data.data});
+      this.setState({
+        data: data.data,
+        static_data: data.data
+      });
     })
   }
   appendData(data) {
     let old_data = this.state.data;
     let new_data = old_data.concat(data);
-    this.setState({data: new_data});
+    this.setState({
+      data: new_data,
+      static_data: new_data
+    });
   }
   sliceData(nick) {
     let old_data = this.state.data;
     let new_data = old_data.filter((v) => { return v.nick_name != nick; });
-    this.setState({data: new_data});
+    this.setState({
+      data: new_data,
+      static_data: new_data
+    });
+  }
+  filterData(keyword) {
+    let data = this.state.static_data;
+    let filtered = [];
+    if (!keyword){
+      this.setState({data: data});
+      return;
+    }
+    for (let i = 0; i < data.length; i++) {
+      let regex = new RegExp(keyword, "i");
+      if (regex.test(data[i].name) || regex.test(data[i].company)) {
+        filtered.push(data[i]);
+      } else {
+        for (let j = 0; j < data[i].email.length; j++) {
+          if (regex.test(data[i].email[j])) {
+            filtered.push(data[i]);
+            break;
+          }
+        }
+        for (let k = 0; k < data[i].phone.length; k++) {
+          if (regex.test(data[i].phone[k])) {
+            filtered.push(data[i]);
+            break;
+          }
+        }
+        for (let l = 0; l < data[i].address.length; l++) {
+          if (regex.test(data[i].address[l])) {
+            filtered.push(data[i]);
+            break;
+          }
+        }
+      }
+    }
+    this.setState({data: filtered});
   }
   render() {
     return(
       <div className="container">
-        <ContactContainer data={this.state.data} update={this.appendData} delete={this.sliceData} />
+        <ContactContainer data={this.state.data} update={this.appendData} delete={this.sliceData} find={this.filterData} />
       </div>
     );
   }
@@ -116,6 +161,7 @@ class ContactContainer extends React.Component {
     this.editData   = this.editData.bind(this);
     this.saveData   = this.saveData.bind(this);
     this.removeData = this.removeData.bind(this);
+    this.searchData = this.searchData.bind(this);
   }
   viewDetail(nick) {
     fetch(API_ROOT + 'api/contacts/' + nick, {
@@ -175,6 +221,14 @@ class ContactContainer extends React.Component {
       edit: false
     });
   }
+  searchData(keyword) {
+    this.props.find(keyword);
+    this.setState({
+      add: false,
+      detail: false,
+      edit: false
+    });
+  }
   render() {
     let data_contact = this.props.data.map((contact, i) => {
       return(
@@ -186,7 +240,7 @@ class ContactContainer extends React.Component {
       <div className="contact-container">
         <div className="contact-item-container">
           <button onClick={this.addData}>ADD</button>
-          <Search />
+          <Search filter={this.searchData} />
           {data_contact}
         </div>
         {(this.state.add)? <Add save={this.updateData} />:null}
@@ -293,7 +347,7 @@ class Search extends React.Component {
   render() {
     return(
       <div className="search-bar">
-        <input type="text" placeholder="Search..." />
+        <input type="text" onChange={(e) => {e.preventDefault(); this.props.filter(e.target.value)}} placeholder="Search..." />
       </div>
     );
   }
