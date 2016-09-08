@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+}
+.contact-container {
+  float: left;
+  width: 100%;
+  border-top: 1px solid gray;
+}
+.contact-item-container {
+  float: left;
+  width: 20%;
+  min-height: 300px;
+  height: 85vh;
+  border-right: 1px solid gray;
+}
+.contact-item {
+  border-bottom: 1px solid gray;
+  cursor: pointer;
+  padding: 10px;
+}
+.contact-name {
+  font-size: 1.2rem;
+  margin: 0;
+}
+.contact-detail {
+  float: left;
+  width: 70%;
+  padding: 10px;
+}
+.contact-description{
+  float: left;
+  width: 50%;
+}
+.contact-action{
+  float: left;
+  width: 50%;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 10px;
+}
+.search-bar input {
+  width: 100%;
+  border: 1px solid gray;
+  padding: 5px;
+}
+
+
+.edit-form {
+  float: left;
+  width: 70%;
+  padding: 10px;
+}
+.input-group{
+  width: 100%;
+}
+.input-group input {
+  /*display: block;*/
+}

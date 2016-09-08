@@ -42,7 +42,17 @@ router.route('/contacts')
       .json({
         success: true,
         message: 'Get Data Succesfully',
-        data: data,
+        data: data
+        // {
+        //   name: data.name,
+        //   nick_name: data.nick_name,
+        //   title: data.title,
+        //   email: data.email,
+        //   phone: data.phone,
+        //   address: data.address,
+        //   company: data.company
+        // }
+        ,
         length: data.length
       });
     });
@@ -81,8 +91,7 @@ router.route('/contacts')
         res
         .json({
           success: true,
-          message: 'Data inserted',
-          data: data
+          message: 'Data inserted'
         });
       });
     } else {
@@ -117,8 +126,7 @@ router.route('/contacts/:name')
         res
         .json({
           success: false,
-          message: `Data ${req.params.name} Not Found`,
-          data: data
+          message: `Data ${req.params.name} Not Found`
         });
       }
     });
@@ -150,8 +158,7 @@ router.route('/contacts/:name')
       .status(200)
       .json({
         success: true,
-        message: 'Data Updated',
-        data: new_data
+        message: 'Data Updated'
       });
     });
   })

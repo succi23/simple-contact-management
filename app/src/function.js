@@ -50,7 +50,7 @@ const checkArray = (data) => {
     JSON.parse(data);
   } catch (e) {
     success = false;
-    return data;
+    return [data];
   }
   if (success) {
     return JSON.parse(data);
