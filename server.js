@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 
 app.use('/api', routes);
 
+mongoose.Promise = global.Promise;
 mongoose.connect(config.MONGO_URL, () => {
   console.log('Database dah melayang');
 })

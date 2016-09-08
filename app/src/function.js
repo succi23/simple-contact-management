@@ -18,8 +18,12 @@ const authorizeUser = (user) => {
 };
 
 const validateEmail = (email) => {
+  let b = false;
   let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
+  for (var i = 0; i < email.length; i++) {
+    b = re.test(email[i]);
+  }
+  return b;
 }
 
 const checkEmpyProp = (obj) => {
@@ -32,12 +36,9 @@ const checkEmpyProp = (obj) => {
     return false;
   }
   data = data.filter(function(v){
-    return v.message;
-    // return v.message !== "";
+    return v == "";
   });
   if (data.length > 0) {
-    console.log(data);
-    // ERROR = data;
     return false;
   } else {
     return true;

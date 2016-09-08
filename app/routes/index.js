@@ -64,28 +64,36 @@ router.route('/contacts')
     data.address = fn.checkArray(req.body.address);
 
     if (fn.checkEmpyProp(data)){
-      let contact = new Contact({
-        name: data.name,
-        title: data.title,
-        email: data.email,
-        phone: data.phone,
-        address: data.address,
-        company: data.company
-      });
+      if (fn.validateEmail(data.email)) {
+        let contact = new Contact({
+          name: data.name,
+          title: data.title,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+          company: data.company
+        });
 
-      contact.save((err) => {
-        if (err)
+        contact.save((err) => {
+          if (err)
+            res
+            .json({
+              success: false,
+              message: 'Server Error'
+            });
           res
           .json({
-            success: false,
-            message: 'Server Error'
+            success: true,
+            message: 'Data inserted'
           });
+        });
+      }else{
         res
         .json({
-          success: true,
-          message: 'Data inserted'
+          success: false,
+          message: 'Email not valid'
         });
-      });
+      }
     } else {
       res
       .json({
@@ -164,12 +172,20 @@ router.route('/contacts/:name')
           success: false,
           message: 'Server Error'
         });
-      res
-      .status(200)
-      .json({
-        success: true,
-        message: 'Data Deleted',
-      });
+      if (data != null){
+        res
+        .status(200)
+        .json({
+          success: true,
+          message: `Data ${req.params.name} Deleted`,
+        });
+      } else {
+        res
+        .json({
+          success: false,
+          message: `Data ${req.params.name} Not Found`
+        });
+      }
     });
   });
 
