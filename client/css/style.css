@@ -4,18 +4,55 @@
 html, body {
   margin: 0;
   padding: 0;
+  overflow-y: hidden;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+h1,h2,h3,h4,h5,h6,label {
+}
+label {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 900;
+  margin: 10px auto;
+}
+.row {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+.full,
+.half {
+  float: left;
+  padding: 10px;
+}
+.full {
+  width: 100%;
+}
+.half {
+  width: 50%;
+}
+
+/* Container */
 .contact-container {
   float: left;
   width: 100%;
-  border-top: 1px solid gray;
 }
+
+/*Sidebar*/
 .contact-item-container {
-  float: left;
-  width: 20%;
+  max-width: 350px;
   min-height: 300px;
-  height: 85vh;
+  height: 100vh;
+  overflow: hidden;
   border-right: 1px solid gray;
+}
+.search {
+  height: 80px;
+}
+.contact-list {
+  float: left;
+  height: calc(100% - 70px);
+  overflow-y: auto;
+  margin-right: -11px;
 }
 .contact-item {
   border-bottom: 1px solid gray;
@@ -26,20 +63,8 @@ html, body {
   font-size: 1.2rem;
   margin: 0;
 }
-.contact-detail {
-  float: left;
-  width: 70%;
-  padding: 10px;
-}
-.contact-description{
-  float: left;
-  width: 50%;
-}
-.contact-action{
-  float: left;
-  width: 50%;
-}
 
+/*Search*/
 .search-bar {
   width: 100%;
   padding: 10px;
@@ -50,15 +75,100 @@ html, body {
   padding: 5px;
 }
 
+/*Content Bar*/
+.contact-content-container {
+  height: 100vh;
+  max-width: 600px;
+  padding: 10px 20px;
+  overflow-y: auto;
+}
+.page-container {
+  padding: 10px;
+}
 
-.edit-form {
+/*Detail Content*/
+.contact-detail {
+  max-width: 100%;
+}
+.contact-description,
+.contact-action {
+  float: left;
+  width: 100%;
+}
+
+/*Form*/
+.contact-form {
   float: left;
   width: 70%;
   padding: 10px;
 }
-.input-group{
+.input-group {
+  float: left;
   width: 100%;
+  margin-bottom: 10px;
 }
-.input-group input {
-  /*display: block;*/
+.input-group-item {
+  float: left;
+  width: 100%;
+  margin-bottom: 5px;
+}
+.action {
+  float: right;
+  text-align: right;
+  cursor: pointer;
+}
+.input-group-item .action {
+  width: 20px;
+  height: 20px;
+}
+input, select, textarea {
+  float: left;
+  height: 30px;
+  padding: 5px;
+  font-size: 0.875rem;
+  margin-right: 3px;
+  width: calc(100% - 25px);
+}
+textarea {
+  max-width: calc(100% - 25px);
+  height: 80px;
+  max-height: 200px;
+}
+.fa {
+  float: right;
+  margin-top: 2px;
+  font-size: 1.5rem !important;
+}
+
+/*Menu*/
+.menu {
+  float: left;
+  width: 70%;
+  margin: 5px 0px;
+  padding: 10px 0px;
+  border-bottom: 1px solid gray;
+}
+ul.menu > li {
+  list-style: none;
+  display: inline-block;
+  margin: 10px;
+}
+ul.menu > li > a {
+  padding: 10px;
+  cursor: pointer;
+}
+*::-webkit-scrollbar-track {
+	/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+	background-color: transparent;
+}
+*::-webkit-scrollbar {
+	width: 8px;
+	background-color: transparent;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+}
+*::-webkit-scrollbar-thumb {
+	background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
 }

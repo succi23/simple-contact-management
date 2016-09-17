@@ -144,23 +144,38 @@ router.route('/contacts/:name')
     new_data.email   = fn.checkArray(req.body.email);
     new_data.phone   = fn.checkArray(req.body.phone);
     new_data.address = fn.checkArray(req.body.address);
-
-    Contact.findOneAndUpdate({
-      nick_name: req.params.name
-    }, new_data, (err, data) => {
-      if (err)
+    if (fn.checkEmpyProp(new_data)){
+      if (fn.validateEmail(new_data.email)) {
+        Contact.findOneAndUpdate({
+          nick_name: req.params.name
+        }, new_data, (err, data) => {
+          if (err)
+            res
+            .json({
+              success: false,
+              message: 'Server Error'
+            });
+          res
+          .status(200)
+          .json({
+            success: true,
+            message: 'Data Updated'
+          });
+        });
+      } else {
         res
         .json({
           success: false,
-          message: 'Server Error'
+          message: 'Email not valid'
         });
+      }
+    } else {
       res
-      .status(200)
       .json({
-        success: true,
-        message: 'Data Updated'
+        success: false,
+        message: 'Please complete the data'
       });
-    });
+    }
   })
   .delete((req, res) => {
     Contact.findOneAndRemove({

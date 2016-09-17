@@ -1,4 +1,3 @@
-const { Router, Route, IndexRoute, Link, browserHistory } = ReactRouter;
 const user = {  name: 'foo',  pass: 'bar' };
 const AUTH = "Basic " + btoa(user.name + ":" + user.pass);
 const API_ROOT = 'http://localhost:8080/';
@@ -21,31 +20,7 @@ const serialize = (obj) => {
   return str.join("&");
 };
 
-class MainLayout extends React.Component {
-  render() {
-    return(
-      <div>
-        <Menu/>
-        <section className="main-content">
-          {this.props.children}
-        </section>
-      </div>
-    );
-  }
-}
-
-class Menu extends React.Component {
-  render() {
-    return(
-      <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/about">About</Link></li>
-      </ul>
-    );
-  }
-}
-
-class Home extends React.Component {
+class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -79,7 +54,7 @@ class Home extends React.Component {
   }
   appendData(data) {
     let old_data = this.state.data;
-    let new_data = old_data.concat(data);
+    let new_data = new Array(data).concat(old_data);
     this.setState({
       data: new_data,
       static_data: new_data
@@ -100,8 +75,10 @@ class Home extends React.Component {
       this.setState({data: data});
       return;
     }
+    // keyword = keyword.replace(/[^\w\s]/gi, '');
+    keyword = keyword.replace(/\\/g, "\\\\");
     for (let i = 0; i < data.length; i++) {
-      let regex = new RegExp(keyword, "i");
+      let regex = new RegExp((keyword), "gi");
       if (regex.test(data[i].name) || regex.test(data[i].company)) {
         filtered.push(data[i]);
       } else {
@@ -129,18 +106,22 @@ class Home extends React.Component {
   }
   render() {
     return(
-      <div className="container">
-        <ContactContainer data={this.state.data} update={this.appendData} delete={this.sliceData} find={this.filterData} />
+      <div>
+        <section className="main-content">
+          <div className="container">
+            <ContactContainer data={this.state.data} update={this.appendData} delete={this.sliceData} find={this.filterData} />
+          </div>
+        </section>
       </div>
     );
   }
 }
 
-class About extends React.Component {
+class Home extends React.Component {
   render() {
     return(
-      <div className="container">
-        <h1>About</h1>
+      <div className="page-container">
+        <h1>Home</h1>
       </div>
     );
   }
@@ -151,9 +132,7 @@ class ContactContainer extends React.Component {
     super(props);
     this.state = {
       data: DEFAULT_VALUE,
-      add: false,
-      detail: false,
-      edit: false
+      view: ''
     }
     this.updateData = this.updateData.bind(this);
     this.addData    = this.addData.bind(this);
@@ -176,9 +155,7 @@ class ContactContainer extends React.Component {
     .then((data) => {
       this.setState({
         data: data.data,
-        detail: true,
-        edit: false,
-        add: false,
+        view: 'detail'
       });
     });
   }
@@ -186,48 +163,26 @@ class ContactContainer extends React.Component {
     this.props.update(data);
     this.viewDetail(data.nick_name);
     this.setState({
-      add: false,
-      detail: true,
-      edit: false
+      view: 'detail'
     });
   }
   removeData(nick) {
     this.props.delete(nick);
-    this.setState({
-      add: false,
-      detail: false,
-      edit: false
-    });
+    this.setState({ view: '' });
   }
   addData() {
-    this.setState({
-      add: true,
-      detail: false,
-      edit: false
-    });
+    this.setState({ view: 'add' });
   }
   editData() {
-    this.setState({
-      add: false,
-      detail: false,
-      edit: true
-    });
+    this.setState({ view: 'edit' });
   }
   saveData(nick){;
     this.viewDetail(nick);
-    this.setState({
-      add: false,
-      detail: true,
-      edit: false
-    });
+    this.setState({ view: 'detail' });
   }
   searchData(keyword) {
     this.props.find(keyword);
-    this.setState({
-      add: false,
-      detail: false,
-      edit: false
-    });
+    this.setState({ view: '' });
   }
   render() {
     let data_contact = this.props.data.map((contact, i) => {
@@ -236,16 +191,31 @@ class ContactContainer extends React.Component {
          view={this.viewDetail} />
       );
     });
+    let view_content = () => {
+      switch (this.state.view) {
+        case 'add': return(<Add add={true} save={this.updateData} />);
+        case 'detail': return(<Detail data={this.state.data} edit={this.editData} delete={this.removeData} />);
+        case 'edit': return(<Edit data={this.state.data} save={this.saveData} />);
+        default: return(<Home/>);
+
+      }
+    }
     return(
       <div className="contact-container">
-        <div className="contact-item-container">
-          <button onClick={this.addData}>ADD</button>
-          <Search filter={this.searchData} />
-          {data_contact}
+        <div className="half contact-item-container">
+          <div className="row search">
+            <span className="full" style={{ 'textAlign': 'center' }}>All Contacts
+              <button style={{ 'float': 'right' }} onClick={this.addData}><Icon name="plus"/></button>
+            </span>
+            <Search filter={this.searchData} />
+          </div>
+          <div className="row contact-list">
+            {data_contact}
+          </div>
         </div>
-        {(this.state.add)? <Add save={this.updateData} />:null}
-        {(this.state.detail)? <Detail data={this.state.data} edit={this.editData} delete={this.removeData} />:null}
-        {(this.state.edit)? <Edit data={this.state.data} save={this.saveData} />:null}
+        <div className="half contact-content-container">
+          {view_content()}
+        </div>
       </div>
     );
   }
@@ -261,8 +231,8 @@ class Contact extends React.Component {
   }
   render() {
     return(
-      <div onClick={this.pickContact} className="contact-item">
-        <p className="contact-name">{this.props.name}</p>
+      <div onClick={this.pickContact} className="full contact-item">
+        <label className="contact-name">{this.props.name}</label>
         <i>{this.props.company}</i>
       </div>
     );
@@ -281,20 +251,22 @@ class Detail extends React.Component {
   }
   removeContact(e) {
     e.preventDefault();
-    fetch(API_ROOT + 'api/contacts/' + this.props.data.nick_name, {
-      method: 'DELETE',
-      headers: {
-        "Authorization": AUTH
-      }
-    })
-    .then((res) => {
-      return res.json();
-    })
-    .then((result) => {
-      if(result.success){
-        this.props.delete(this.props.data.nick_name);
-      }
-    });
+    if (confirm(`Apa Kamu Yakin Mau menghapus ${this.props.data.name} ?`)) {
+      fetch(API_ROOT + 'api/contacts/' + this.props.data.nick_name, {
+        method: 'DELETE',
+        headers: {
+          "Authorization": AUTH
+        }
+      })
+      .then((res) => {
+        return res.json();
+      })
+      .then((result) => {
+        if(result.success){
+          this.props.delete(this.props.data.nick_name);
+        }
+      });
+    }
   }
   render() {
     let phone = this.props.data.phone.map((p, i) => {
@@ -319,10 +291,10 @@ class Detail extends React.Component {
       );
     });
     return(
-      <div className="contact-detail">
+      <div className="full contact-detail">
         <div className="contact-description">
           <label>Name</label>
-          <h3>{this.props.data.name}</h3>
+          {this.props.data.name}
           <label>Phone</label>
           { phone }
           <label>Title</label>
@@ -335,8 +307,14 @@ class Detail extends React.Component {
           {this.props.data.company}
         </div>
         <div className="contact-action">
-          <button onClick={this.changeAction}>Change</button><br/>
-          <button onClick={this.removeContact}>Delete</button>
+          <div className="row">
+            <div className="half">
+              <button className="full" onClick={this.changeAction}>Change</button>
+            </div>
+            <div className="half">
+              <button className="full" onClick={this.removeContact}>Delete</button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -379,7 +357,7 @@ class Add extends React.Component {
     });
   }
   render() {
-    return(<Form save={this.submitData} />);
+    return(<Form add={true} save={this.submitData} />);
   }
 }
 
@@ -415,6 +393,11 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = (this.props.data)? this.props.data:DEFAULT_VALUE;
+    if (this.props.add) {
+      this.state.email   = [""];
+      this.state.phone   = [""];
+      this.state.address = [""];
+    }
     this.sendData = this.sendData.bind(this);
     this.handleArray = this.handleArray.bind(this);
     this.addItem = this.addItem.bind(this);
@@ -436,9 +419,9 @@ class Form extends React.Component {
     e.preventDefault();
     let data = this.state[key];
     let obj = {};
-    if (data.length >= 5){
+    if (data.length >= 3){
       // data = [""];
-      console.log('Max nya 5 coy');
+      console.log('Max nya 3 coy');
     } else {
       data.push("");
     }
@@ -459,66 +442,74 @@ class Form extends React.Component {
   }
   render() {
     return(
-      <div className="edit-form">
-      <form onSubmit={this.sendData}>
-          name:  <input type="text" onChange={ (e)=>this.setState({name: e.target.value}) } value={this.state.name} /><br />
-          title: <input type="text" onChange={ (e)=>this.setState({title: e.target.value}) } value={this.state.title} /><br />
-          email:
-          <div className="input-group">
-            {
-              this.state.email.map((val,i) => {
-                return(
-                  <div className="input-group-item">
-                    <input type="text" onChange={ (e)=> this.handleArray(e, 'email', i) } value={val} />
-                    <button onClick={(e) => this.removeItem(e, 'email', i) }>x</button>
-                  </div>
-                );
-              })
-            }
-            <button onClick={(e) => this.addItem(e, 'email') }>+</button>
-          </div>
-          phone:
-          <div className="input-group">
-            {
-              this.state.phone.map((val,i) => {
-                return(
-                  <div className="input-group-item">
-                    <input type="text" onChange={ (e)=> this.handleArray(e, 'phone', i) } value={val} />
-                    <button onClick={(e) => this.removeItem(e, 'phone', i) }>x</button>
-                  </div>
-                );
-              })
-            }
-            <button onClick={(e) => this.addItem(e, 'phone') }>+</button>
-          </div>
-          address:
-          <div className="input-group">
-            {
-              this.state.address.map((val,i) => {
-                return(
-                  <div className="input-group-item">
-                    <input type="text" onChange={ (e)=> this.handleArray(e, 'address', i) } value={val} />
-                    <button onClick={(e) => this.removeItem(e, 'address', i) }>x</button>
-                  </div>
-                );
-              })
-            }
-            <button onClick={(e) => this.addItem(e, 'address') }>+</button>
-          </div>
-          company:<input type="text" onChange={ (e)=>this.setState({company: e.target.value}) } value={this.state.company} /><br />
-          <button>SIMPAN</button>
-        </form>
-      </div>
+      <form onSubmit={this.sendData} className="contact-form">
+        <div className="input-group">
+          <label>Name</label>
+          <input type="text" onChange={ (e)=>this.setState({name: e.target.value}) } value={this.state.name} />
+        </div>
+        <div className="input-group">
+          <label>Title</label>
+          <input type="text" onChange={ (e)=>this.setState({title: e.target.value}) } value={this.state.title} />
+        </div>
+        <div className="input-group">
+          <label>
+            Email
+            <span className="action" onClick={(e) => this.addItem(e, 'email') }><Icon name="plus"/></span>
+          </label>
+          {
+            this.state.email.map((val,i) => {
+              return(
+                <div className="input-group-item">
+                  <input type="email" onChange={ (e)=> this.handleArray(e, 'email', i) } value={val} />
+                  <span className="action" onClick={(e) => this.removeItem(e, 'email', i) }><Icon name="remove"/></span>
+                </div>
+              );
+            })
+          }
+        </div>
+        <div className="input-group">
+          <label>
+            Phone
+            <span className="action" onClick={(e) => this.addItem(e, 'phone') }><Icon name="plus"/></span>
+          </label>
+          {
+            this.state.phone.map((val,i) => {
+              return(
+                <div className="input-group-item">
+                  <input type="text" onChange={ (e)=> this.handleArray(e, 'phone', i) } value={val} />
+                  <span className="action" onClick={(e) => this.removeItem(e, 'phone', i) }><Icon name="remove"/></span>
+                </div>
+              );
+            })
+          }
+        </div>
+        <div className="input-group">
+          <label>
+            Address
+            <span className="action" onClick={(e) => this.addItem(e, 'address') }><Icon name="plus"/></span>
+          </label>
+          {
+            this.state.address.map((val,i) => {
+              return(
+                <div className="input-group-item">
+                  <textarea onChange={ (e)=> this.handleArray(e, 'address', i) } value={val} ></textarea>
+                  <span className="action" onClick={(e) => this.removeItem(e, 'address', i) }><Icon name="remove"/></span>
+                </div>
+              );
+            })
+          }
+        </div>
+        <div className="input-group">
+          <label>Company</label>
+          <input type="text" onChange={ (e)=>this.setState({company: e.target.value}) } value={this.state.company} /><br />
+        </div>
+        <button onClick={(e)=>{e.preventDefault(); this.setState(DEFAULT_VALUE)}}>RESET</button>
+        <button>SIMPAN</button>
+      </form>
     );
   }
 }
 
-ReactDOM.render(
-  <Router>
-    <Route path="/" component={MainLayout}>
-      <IndexRoute component={Home} />
-      <Route path="/about" component={About} />
-    </Route>
-  </Router>
-  , document.getElementById('app-container')
-);
+class Icon extends React.Component { render() { return( <i className={ "fa fa-" + this.props.name }></i> ); } }
+
+ReactDOM.render(<App />, document.getElementById('app-container'));
