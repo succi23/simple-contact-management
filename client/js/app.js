@@ -204,9 +204,9 @@ class ContactContainer extends React.Component {
       <div className="contact-container">
         <div className="half contact-item-container">
           <div className="row search">
-            <span className="full" style={{ 'textAlign': 'center' }}>All Contacts
-              <button style={{ 'float': 'right' }} onClick={this.addData}><Icon name="plus"/></button>
-            </span>
+            <h2 className="full contact-title">All Contacts
+              <span className="action" style={{ 'float': 'right' }} onClick={this.addData}><Icon name="plus"/></span>
+            </h2>
             <Search filter={this.searchData} />
           </div>
           <div className="row contact-list">
@@ -232,8 +232,9 @@ class Contact extends React.Component {
   render() {
     return(
       <div onClick={this.pickContact} className="full contact-item">
-        <label className="contact-name">{this.props.name}</label>
-        <i>{this.props.company}</i>
+        <h3 className="contact-name">{this.props.name}</h3>
+        <p>{this.props.company}</p>
+        <hr/>
       </div>
     );
   }
@@ -292,6 +293,7 @@ class Detail extends React.Component {
     });
     return(
       <div className="full contact-detail">
+        <h1 className="content-title">Contact Detail</h1>
         <div className="contact-description">
           <label>Name</label>
           {this.props.data.name}
@@ -357,7 +359,12 @@ class Add extends React.Component {
     });
   }
   render() {
-    return(<Form add={true} save={this.submitData} />);
+    return(
+      <div className="full">
+        <h1 className="content-title">Add New Contact</h1>
+        <Form add={true} save={this.submitData} />
+      </div>
+    );
   }
 }
 
@@ -385,7 +392,12 @@ class Edit extends React.Component {
     });
   }
   render() {
-    return(<Form data={this.props.data} save={this.submitData} />);
+    return(
+      <div className="full">
+        <h1 className="content-title">Edit Contact {this.props.data.name} </h1>
+        <Form data={this.props.data} save={this.submitData} />
+      </div>
+    );
   }
 }
 
@@ -510,6 +522,20 @@ class Form extends React.Component {
   }
 }
 
-class Icon extends React.Component { render() { return( <i className={ "fa fa-" + this.props.name }></i> ); } }
+class Icon extends React.Component {
+  componentDidMount(){
+    $('.action').on('click', function(e) {
+      e.preventDefault();
+      $(this).addClass('button-effect');
+      var that = $(this);
+      setTimeout(function () {
+        that.removeClass('button-effect');
+      }, 200);
+    })
+  }
+  render() {
+    return( <i className={ "fa fa-" + this.props.name }></i> );
+  }
+}
 
 ReactDOM.render(<App />, document.getElementById('app-container'));

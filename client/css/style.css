@@ -7,12 +7,14 @@ html, body {
   overflow-y: hidden;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-h1,h2,h3,h4,h5,h6,label {
+h1,h2,h3,h4,h5,h6,label,.contact-name {
+  color: #000;
+  font-weight: 900;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 label {
   display: block;
-  font-size: 1.2rem;
-  font-weight: 900;
+  font-size: 1.3rem;
   margin: 10px auto;
 }
 .row {
@@ -46,21 +48,45 @@ label {
   border-right: 1px solid gray;
 }
 .search {
-  height: 80px;
+  height: 100px;
+  /*border-bottom: 1px solid gray;*/
+}
+.contact-title {
+  text-align: center;
+  margin: 0;
+  width: calc(100% - 30px);
+  margin-left: 20px;
+  padding-right: 0px;
 }
 .contact-list {
-  float: left;
-  height: calc(100% - 70px);
+  height: calc(100% - 90px);
   overflow-y: auto;
   margin-right: -11px;
 }
 .contact-item {
-  border-bottom: 1px solid gray;
   cursor: pointer;
-  padding: 10px;
+  padding-left: 20px;
+  margin-top: -1px;
+}
+.contact-item hr {
+  margin: 0px -10px -10px;
+  border-style: none;
+  border-bottom: 1px solid gray;
+}
+.contact-itemx::after {
+  content: "";
+  float: left;
+  width: 20%;
+  border-bottom: 3px solid gray;
+}
+.contact-item:hover {
+  background: rgba(255, 0, 0, 0.7);
+}
+.contact-item:hover::after {
 }
 .contact-name {
-  font-size: 1.2rem;
+  font-weight: 600;
+  font-size: 1.3rem;
   margin: 0;
 }
 
@@ -82,6 +108,17 @@ label {
   padding: 10px 20px;
   overflow-y: auto;
 }
+.content-title {
+  font-size: 2.3rem;
+  margin: 0px;
+}
+.content-title::after{
+  content: "";
+  float: left;
+  width: 100%;
+  margin: 20px auto;
+  border-bottom: 1px solid gray;
+}
 .page-container {
   padding: 10px;
 }
@@ -100,7 +137,6 @@ label {
 .contact-form {
   float: left;
   width: 70%;
-  padding: 10px;
 }
 .input-group {
   float: left;
@@ -114,20 +150,29 @@ label {
 }
 .action {
   float: right;
-  text-align: right;
   cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
-.input-group-item .action {
-  width: 20px;
-  height: 20px;
+@keyframes anim {
+  30%{ transform: scale(0.75); }
+  50%{ background-color: rgba(50, 50, 50, 0.2); }
+  70%{ transform: scale(1); }
+  100%{ background-color: rgba(50, 50, 50, 0); }
+}
+
+.button-effect {
+  animation-name: anim;
+  animation-duration: 0.25s;
 }
 input, select, textarea {
   float: left;
   height: 30px;
   padding: 5px;
   font-size: 0.875rem;
-  margin-right: 3px;
-  width: calc(100% - 25px);
+  width: calc(100% - 30px);
+  font-family: "Open Sans", sans-serif;
 }
 textarea {
   max-width: calc(100% - 25px);
@@ -135,9 +180,14 @@ textarea {
   max-height: 200px;
 }
 .fa {
-  float: right;
-  margin-top: 2px;
+  display: block;
+  margin: 0 auto;
   font-size: 1.5rem !important;
+  transform: translateY(50%);
+  margin-top: calc(-50% + 3px);
+  height: 29px;
+  width: 28px;
+  text-align: center;
 }
 
 /*Menu*/
