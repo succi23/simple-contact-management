@@ -17,6 +17,23 @@ label {
   font-size: 1.3rem;
   margin: 10px auto;
 }
+.btn {
+  width: 100%;
+  height: 50px;
+  border: none;
+  padding: 10px;
+  font-size: 1rem;
+  color: #fff;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+.btn-blue {
+  background-color: rgba(0, 0, 255, 0.7)
+}
+
+.btn-red {
+  background-color: rgba(255, 0, 0, 0.7);
+}
 .row {
   margin-left: -10px;
   margin-right: -10px;
@@ -57,9 +74,10 @@ label {
   width: calc(100% - 30px);
   margin-left: 20px;
   padding-right: 0px;
+  margin-top: -5px;
 }
 .contact-list {
-  height: calc(100% - 90px);
+  height: calc(100% - 85px);
   overflow-y: auto;
   margin-right: -11px;
 }
@@ -119,6 +137,13 @@ label {
   margin: 20px auto;
   border-bottom: 1px solid gray;
 }
+hr.separator {
+  width: 100%;
+  margin: 20px auto;
+  border-style: none;
+  border-bottom: 1px solid gray;
+  display: inline-block;
+}
 .page-container {
   padding: 10px;
 }
@@ -136,7 +161,8 @@ label {
 /*Form*/
 .contact-form {
   float: left;
-  width: 70%;
+  width: 100%;
+  max-width: 570px;
 }
 .input-group {
   float: left;
@@ -155,6 +181,30 @@ label {
   height: 30px;
   border-radius: 50%;
 }
+.contact-detail-content {
+  float: left;
+  width: 100%;
+  margin: 8px auto;
+}
+.contact-form label,
+.contact-detail-content label,
+.contact-detail-content .content {
+  font-size: 1.125rem;
+  font-family: 'Lato', Arial;
+}
+.contact-detail-content label{
+  float: left;
+  width: 40%;
+  margin: 0px;
+}
+.contact-detail-content .content{
+  float: left;
+  width: 55%;
+}
+.content .tree-item {
+  padding-bottom: 8px;
+}
+
 @keyframes anim {
   30%{ transform: scale(0.75); }
   50%{ background-color: rgba(50, 50, 50, 0.2); }
@@ -207,6 +257,15 @@ ul.menu > li > a {
   padding: 10px;
   cursor: pointer;
 }
+
+.sponsor label {
+  text-align: center;
+}
+.sponsor img {
+  width: 100%;
+}
+
+/*Scrollbar*/
 *::-webkit-scrollbar-track {
 	/*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
 	background-color: transparent;

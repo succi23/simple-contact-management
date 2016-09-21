@@ -121,7 +121,16 @@ class Home extends React.Component {
   render() {
     return(
       <div className="page-container">
-        <h1>Home</h1>
+        <h1 className="content-title">Contact Manager</h1>
+        <div className="row sponsor">
+          <label>Sponsored By</label>
+          <div className="half">
+            <img src="img/pixelhouse-logo.png" />
+          </div>
+          <div className="half">
+            <img src="img/codepolitan-logo.png" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -272,21 +281,21 @@ class Detail extends React.Component {
   render() {
     let phone = this.props.data.phone.map((p, i) => {
       return(
-        <div className="phone-item">
+        <div className="tree-item">
           <span key={i}>{p}</span><br/>
         </div>
       );
     });
     let email = this.props.data.email.map((p, i) => {
       return(
-        <div className="email-item">
+        <div className="tree-item">
           <span key={i}>{p}</span><br/>
         </div>
       );
     });
     let address = this.props.data.address.map((p, i) => {
       return(
-        <div className="address-item">
+        <div className="tree-item">
           <span key={i}>{p}</span><br/>
         </div>
       );
@@ -295,26 +304,51 @@ class Detail extends React.Component {
       <div className="full contact-detail">
         <h1 className="content-title">Contact Detail</h1>
         <div className="contact-description">
-          <label>Name</label>
-          {this.props.data.name}
-          <label>Phone</label>
-          { phone }
-          <label>Title</label>
-          <span>{this.props.data.title}</span>
-          <label>Email</label>
-          { email }
-          <label>Address</label>
-          { address }
-          <label>Company</label>
-          {this.props.data.company}
+          <div className="contact-detail-content">
+            <label>Name</label>
+            <div className="content">
+              {this.props.data.name}
+            </div>
+          </div>
+          <div className="contact-detail-content">
+            <label>Phone</label>
+            <div className="content">
+              { phone }
+            </div>
+          </div>
+          <div className="contact-detail-content">
+            <label>Title</label>
+            <div className="content">
+              <span>{this.props.data.title}</span>
+            </div>
+          </div>
+          <div className="contact-detail-content">
+            <label>Email</label>
+            <div className="content">
+              { email }
+            </div>
+          </div>
+          <div className="contact-detail-content">
+            <label>Address</label>
+            <div className="content">
+              { address }
+            </div>
+          </div>
+          <div className="contact-detail-content">
+            <label>Company</label>
+            <div className="content">
+              {this.props.data.company}
+            </div>
+          </div>
         </div>
+        <hr className="separator" />
         <div className="contact-action">
           <div className="row">
             <div className="half">
-              <button className="full" onClick={this.changeAction}>Change</button>
+              <button className="btn btn-blue" onClick={this.changeAction}>Change</button>
             </div>
             <div className="half">
-              <button className="full" onClick={this.removeContact}>Delete</button>
+              <button className="btn btn-red" onClick={this.removeContact}>Delete</button>
             </div>
           </div>
         </div>
@@ -394,7 +428,7 @@ class Edit extends React.Component {
   render() {
     return(
       <div className="full">
-        <h1 className="content-title">Edit Contact {this.props.data.name} </h1>
+        <h1 className="content-title">Edit Contact <i>{this.props.data.name}</i> </h1>
         <Form data={this.props.data} save={this.submitData} />
       </div>
     );
@@ -515,8 +549,16 @@ class Form extends React.Component {
           <label>Company</label>
           <input type="text" onChange={ (e)=>this.setState({company: e.target.value}) } value={this.state.company} /><br />
         </div>
-        <button onClick={(e)=>{e.preventDefault(); this.setState(DEFAULT_VALUE)}}>RESET</button>
-        <button>SIMPAN</button>
+        <hr className="separator" />
+        {/* <div style={{ 'marginLeft': '-30px', 'padding': '0px 20px' }}> */}
+        <div className="row">
+          <div className="half">
+            <button className="btn btn-red" onClick={(e)=>{e.preventDefault(); this.setState(DEFAULT_VALUE)}}>Reset</button>
+          </div>
+          <div className="half">
+            <button className="btn btn-blue">Simpan</button>
+          </div>
+        </div>
       </form>
     );
   }
