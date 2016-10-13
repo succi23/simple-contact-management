@@ -28,9 +28,9 @@ app.use('/api', routes);
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.MONGO_URL, () => {
-  console.log('Database dah melayang');
+  console.log('Database is flying');
 })
 
 app.listen(port, () => {
-  console.log(`Server dah terbang pake port ${port}` );
+  console.log(`Server floating at sky ${port}` );
 });

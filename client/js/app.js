@@ -123,13 +123,7 @@ class Home extends React.Component {
       <div className="page-container">
         <h1 className="content-title">Contact Manager</h1>
         <div className="row sponsor">
-          <label>Sponsored By</label>
-          <div className="half">
-            <img src="img/pixelhouse-logo.png" />
-          </div>
-          <div className="half">
-            <img src="img/codepolitan-logo.png" />
-          </div>
+          <h2 className="full">Yoo Broo!</h2>
         </div>
       </div>
     );

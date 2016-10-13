@@ -1,22 +1,22 @@
 {
-  "name": "pixelhouse",
+  "name": "simple-contact-management",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple Contact Management",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/succi23/pixelhouse.git"
+    "url": "git+https://github.com/succi23/simple-contact-management.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "succi23",
+  "license": "MIT",
   "bugs": {
-    "url": "https://gitlab.com/succi23/pixelhouse/issues"
+    "url": "https://github.com/succi23/simple-contact-management/issues"
   },
-  "homepage": "https://gitlab.com/succi23/pixelhouse#README",
+  "homepage": "https://github.com/succi23/simple-contact-management#readme",
   "dependencies": {
     "basic-auth": "^1.0.4",
     "body-parser": "^1.15.2",
